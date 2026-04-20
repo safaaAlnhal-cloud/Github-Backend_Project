@@ -1,24 +1,92 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable,NotFoundException,  BadRequestException  } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from './user.entity';
+
 
 @Injectable()
 export class UsersService {
+  constructor(
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+  ) {}
 
   async fetchGitHubUser(username: string) {
     if (!username || !username.trim()) {
-      throw new Error('Username is required');
+      throw new BadRequestException('Username is required');
     }
 
     const response = await fetch(
       `https://api.github.com/users/${username}`
     );
 
-    if (!response.ok) {
-      if (response.status === 404) {
-        throw new Error('User not found');
-      }
-      throw new Error('GitHub API error');
+    const data = await response.json();
+
+    const existingUser = await this.userRepository.findOne({
+      where: { github_id: data.id },
+    });
+
+    if (existingUser) {
+      return existingUser;
     }
 
-    return await response.json();
+    const newUser = this.userRepository.create({
+      github_id: data.id,
+      username: data.login,
+      name: data.name,
+      avatar_url: data.avatar_url,
+      bio: data.bio,
+      public_repos: data.public_repos,
+      followers: data.followers,
+      following: data.following,
+    });
+   
+    await this.userRepository.save(newUser);
+    return newUser;
   }
+
+
+  async getUsers(limit: number, offset: number) {
+  return this.userRepository.find({
+    take: limit,
+    skip: offset,
+    order: {
+      id: 'DESC',
+    },
+  });
+}
+
+async getUserById(id: number) {
+  if (!id) {
+    throw new BadRequestException('Invalid user id');
+  }
+  const user = await this.userRepository.findOne({
+    where: { id },
+  });
+
+  if (!user) {
+    throw new NotFoundException('User not found');
+  }
+  return user;
+}
+
+async deleteUser(id: number) {
+  if (!id) {
+    throw new BadRequestException('Invalid user id');
+  }
+
+  const user = await this.userRepository.findOne({
+    where: { id },
+  });
+
+  if (!user) {
+    throw new NotFoundException('User not found');
+  }
+
+  await this.userRepository.remove(user);
+
+  return {
+    message: 'User deleted successfully',
+  };
+}
 }
