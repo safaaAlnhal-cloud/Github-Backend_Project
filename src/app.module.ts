@@ -1,11 +1,8 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UsersService } from './users/users.service';
-import { UsersController } from './users/users.controller';
 import { UsersModule } from './users/users.module';
-import { User } from './users/user.entity';
+import { User } from './users/entities/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { SearchHistory } from './users/entities/search-history.entity';
 
 @Module({
    imports: [
@@ -16,12 +13,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       username: 'postgres',
       password: '1234',
       database: 'github_tracker',
-      entities: [User],
+      entities: [User, SearchHistory],
       synchronize: true,
     }),
     UsersModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  
 })
 export class AppModule {}
