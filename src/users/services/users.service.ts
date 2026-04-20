@@ -1,7 +1,7 @@
 import { Injectable,NotFoundException,  BadRequestException  } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from './user.entity';
+import { User } from '../entities/user.entity';
 
 
 @Injectable()
@@ -9,19 +9,10 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+     
   ) {}
 
-  async fetchGitHubUser(username: string) {
-    if (!username || !username.trim()) {
-      throw new BadRequestException('Username is required');
-    }
-
-    const response = await fetch(
-      `https://api.github.com/users/${username}`
-    );
-
-    const data = await response.json();
-
+  async saveUser(data: any) {
     const existingUser = await this.userRepository.findOne({
       where: { github_id: data.id },
     });
@@ -89,4 +80,6 @@ async deleteUser(id: number) {
     message: 'User deleted successfully',
   };
 }
+
+
 }
