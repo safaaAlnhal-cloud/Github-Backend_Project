@@ -14,12 +14,13 @@ import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 @Controller('users')
 export class UsersController {
-    constructor(private readonly usersService: UsersService, 
-       private readonly githubService: GitHubService, 
-       
-       @Inject(WINSTON_MODULE_PROVIDER)
-       private readonly logger: Logger,private searchHistoryService: SearchHistoryService,) {}
-
+   constructor(
+  private readonly usersService: UsersService,
+  private readonly githubService: GitHubService,
+  @Inject(WINSTON_MODULE_PROVIDER)
+  private readonly logger: Logger,
+  private readonly searchHistoryService: SearchHistoryService,
+) {}
  @Post('search')
  @Throttle({default: { limit: 3,  ttl: 60, }, })
  async searchUser(@Body() dto: CreateUserDto) {
