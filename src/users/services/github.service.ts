@@ -11,9 +11,13 @@ export class GitHubService {
       `https://api.github.com/users/${username}`
     );
 
-    if (!response.ok) {
-      throw new BadRequestException('GitHub user not found');
-    }
+  if (response.status === 404) {
+  throw new BadRequestException('GitHub user not found');
+}
+
+if (!response.ok) {
+  throw new BadRequestException(`GitHub error: ${response.status}`);
+}
 
     return await response.json();
   }
