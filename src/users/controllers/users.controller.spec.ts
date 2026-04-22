@@ -17,6 +17,8 @@ describe('UsersController', () => {
           provide: UsersService,
           useValue: {
             getUsers: jest.fn(),
+            createUser: jest.fn(),   // ✅ مهم
+            deleteUser: jest.fn(),   // ✅ مهم
           },
         },
         {
@@ -43,10 +45,12 @@ describe('UsersController', () => {
     service = module.get<UsersService>(UsersService);
   });
 
+  // =========================
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
 
+  // =========================
   it('should return users from service', () => {
     const result = [{ id: 1, name: 'Ali' }];
 
@@ -57,4 +61,7 @@ describe('UsersController', () => {
     expect(response).toEqual(result);
     expect(service.getUsers).toHaveBeenCalledWith(10, 0);
   });
+
+  // =========================
+  
 });
