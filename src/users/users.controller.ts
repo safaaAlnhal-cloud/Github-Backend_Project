@@ -12,6 +12,7 @@ import { Throttle } from '@nestjs/throttler';
 import { Inject } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
+import { ApiParam } from '@nestjs/swagger';
 @Controller('users')
 export class UsersController {
    constructor(
@@ -56,11 +57,21 @@ getHistory(@Query() query: { limit?: number; offset?: number }) {
 
 
  @Get(':id')
+ @ApiParam({
+  name: 'id',
+  type: Number,
+  example: 1,
+})
 getUserById(@Param() params: GetUserDto) {
   return this.usersService.getUserById(params.id);
 }
 
 @Delete(':id')
+@ApiParam({
+  name: 'id',
+  type: Number,
+  example: 1,
+})
 deleteUser(@Param() params: GetUserDto) {
   return this.usersService.deleteUser(params.id);
 }
