@@ -117,7 +117,7 @@ npm run start
 
 
 ## Project Structure
-
+```txt
 src/
 │
 ├── app.controller.ts
@@ -129,6 +129,10 @@ src/
 │
 ├── migrations/
 │   └── 1776826808387-Init.ts
+│
+├── seed/
+│   ├── seed.service.ts
+│   └── run-seed.ts
 │
 ├── users/
 │   ├── users.controller.ts
@@ -150,6 +154,23 @@ src/
 │       └── search-history.entity.ts
 
 
+```
+
+## Database Seed
+
+This project includes a seed strategy to populate the database with initial data.
+
+Seeder is used to insert sample users into the database for development and testing purposes.
+
+---
+
+### Run Seeder
+
+To run the seed script:
+
+```bash
+npx ts-node src/seed/run-seed.ts
+```
 
 ## Running the Project with Docker
 
