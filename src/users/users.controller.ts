@@ -1,15 +1,11 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body , Get, Query ,Param , Delete , Inject} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
-import { Get, Query } from '@nestjs/common';
 import { GetUsersDto } from '../users/dto/get-users.dto';
-import { Param } from '@nestjs/common';
 import { GetUserDto } from '../users/dto/get-user.dto';
-import { Delete } from '@nestjs/common';
 import { GitHubService } from './github.service';
 import { SearchHistoryService } from './search-history.service';
 import { Throttle } from '@nestjs/throttler';
-import { Inject } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { ApiParam } from '@nestjs/swagger';
@@ -67,11 +63,7 @@ getUserById(@Param() params: GetUserDto) {
 }
 
 @Delete(':id')
-@ApiParam({
-  name: 'id',
-  type: Number,
-  example: 1,
-})
+@ApiParam({name: 'id',type: Number,example: 1,})
 deleteUser(@Param() params: GetUserDto) {
   return this.usersService.deleteUser(params.id);
 }
