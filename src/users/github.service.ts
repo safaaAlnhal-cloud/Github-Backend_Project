@@ -1,12 +1,14 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
-
+import { Injectable, BadRequestException, InternalServerErrorException, Logger,} from '@nestjs/common';
 @Injectable()
 export class GitHubService {
+  private readonly logger = new Logger(GitHubService.name);
 
   async fetchUser(username: string) {
     try {
+      this.logger.log(`Fetching GitHub user: ${username}`);
+
       const response = await fetch(
-        `https://api.github.com/users/${username}`
+        `https://api.github.com/users/${username}`,
       );
 
       if (response.status === 404) {
@@ -14,13 +16,25 @@ export class GitHubService {
       }
 
       if (!response.ok) {
-        throw new BadRequestException(`GitHub error: ${response.status}`);
+        throw new BadRequestException(
+          `GitHub API error: ${response.status}`,
+        );
       }
 
-      return await response.json();
+      const data = await response.json();
+
+      this.logger.log(`GitHub user fetched successfully: ${username}`);
+
+      return data;
 
     } catch (err) {
-      throw new BadRequestException('Network error');
+      this.logger.error('GitHub fetch failed', err);
+
+      if (err instanceof BadRequestException) {
+        throw err;
+      }
+
+      throw new InternalServerErrorException();
     }
   }
 }

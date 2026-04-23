@@ -6,7 +6,7 @@ import { SearchHistory } from './users/entities/search-history.entity';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard } from '@nestjs/throttler';
-import { LoggerModule } from './users/logger.module';
+import { LoggerModule } from './logger/logger.module';
 import { ConfigModule , ConfigService } from '@nestjs/config';
 import { envValidationSchema } from 'env.validation';
 
