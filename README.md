@@ -230,7 +230,7 @@ npm run migration:run
 ```
 
 ```md
-## 📦 Tech Stack
+### 📦 Tech Stack
 
 - NestJS
 - TypeORM
@@ -240,7 +240,7 @@ npm run migration:run
 - Docker
 
 
-## 🧪 Testing
+### 🧪 Testing
 
 Run all tests:
 ```bash
@@ -251,7 +251,7 @@ Run test coverage:
 ```bash
 npm run test:cov
 ```
-## 🚀 Production Notes
+### 🚀 Production Notes
 
 - Database synchronization is disabled (synchronize: false)
 - Migrations are used for schema changes
